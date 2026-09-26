@@ -1,7 +1,13 @@
 import Image from "next/image";
 import React from "react";
+import { Workout } from "@/types/workout";
 
-const WorkoutDetailsPage = ({ workout }) => {
+
+interface WorkoutDetailsPageProps {
+  workout: Workout | undefined;
+}
+
+const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
   if (!workout) {
     return <p>Workout not found</p>;
   }

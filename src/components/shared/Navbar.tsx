@@ -9,7 +9,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const isWorkouts = pathname === "/" || pathname.startsWith("/workouts");
-  const isMyPlan = pathname.startsWith("/my-plan");
+  const isMyPlan = pathname.startsWith("/myplan");
 
 
   const links = (
@@ -25,7 +25,7 @@ const Navbar = () => {
 
     <li>
       <Link
-        href="/my-plan"
+        href="/myplan"
         className={isMyPlan ? "bg-[#2b2d21] rounded-2xl text-[#C2F800]" : ""}
       >
         My Plan

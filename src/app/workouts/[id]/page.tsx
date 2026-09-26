@@ -1,5 +1,6 @@
 import WorkoutDetailsPage from '@/components/workout/WorkoutDetails';
 import React from 'react';
+import { Workout } from "@/types/workout";
 
 interface IWorkoutDetailProps {
     params : Promise<{
@@ -7,7 +8,7 @@ interface IWorkoutDetailProps {
     }>
 }
 
-const getWorkout = async() => {
+const getWorkout = async(): Promise<Workout[]> => {
     const res = await fetch("https://api.abcz.workers.dev/api/fitlog")
     const data = await res.json()
     return data
@@ -15,7 +16,7 @@ const getWorkout = async() => {
 const WorkoutPage = async({ params }: IWorkoutDetailProps) => {
     const {id} = await params
     const workoutData = await getWorkout()
-    const workout = workoutData.find((workout:any) => String(workout.id) === String(id))
+    const workout = workoutData.find((workout:Workout) => String(workout.id) === String(id))
     console.log(workoutData)
 
     return (
