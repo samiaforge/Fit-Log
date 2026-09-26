@@ -1,19 +1,40 @@
+"use client"
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+  const pathname = usePathname();
+
+  const isWorkouts = pathname === "/" || pathname.startsWith("/workouts");
+  const isMyPlan = pathname.startsWith("/my-plan");
+
+
   const links = (
     <>
-      <li>
-        <Link href="/workouts">Workouts</Link>
-      </li>
-      <li>
-        <Link href="/my-plan">My Plan</Link>
+      <li className="px-2">
+        <Link
+        href="/"
+        className={isWorkouts ? "bg-[#2b2d21] rounded-2xl text-[#C2F800]" : ""}
+      >
+        Workouts
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/my-plan"
+        className={isMyPlan ? "bg-[#2b2d21] rounded-2xl text-[#C2F800]" : ""}
+      >
+        My Plan
+      </Link>
       </li>
     </>
   );
+
+
   return (
     <div className="sticky top-0 z-50 w-full bg-[#0f1012] border-b border-gray-800">
       <div className="navbar py-4 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -55,7 +76,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
-        <div className="navbar-end gap-2">
+        <div className="navbar-end gap-1">
 
   <Link
     href="/my-plan"
