@@ -1,7 +1,9 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
+import { PlanContext } from "@/context/PlanContext";
 import { Workout } from "@/types/workout";
-
+import toast from "react-hot-toast";
 
 interface WorkoutDetailsPageProps {
   workout: Workout | undefined;
@@ -11,6 +13,14 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
   if (!workout) {
     return <p>Workout not found</p>;
   }
+
+  const context = useContext(PlanContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { plan, saved, addToPlan, addToSaved } = context;
 
   const {
     id,
@@ -31,7 +41,6 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 pb-18">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
         {/* Workout Image */}
         <div className="w-full h-[350px] sm:h-[450px] lg:h-full">
           <Image
@@ -67,40 +76,66 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
               <table className="w-full">
                 <tbody>
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">EQUIPMENT</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{equipment}</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      EQUIPMENT
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {equipment}
+                    </td>
                   </tr>
 
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">DIFFICULTY</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{difficulty}</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      DIFFICULTY
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {difficulty}
+                    </td>
                   </tr>
 
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">SETS</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{sets}</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      SETS
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {sets}
+                    </td>
                   </tr>
 
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">REPS</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{reps}</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      REPS
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {reps}
+                    </td>
                   </tr>
 
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">DURATION</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{duration} min</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      DURATION
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {duration} min
+                    </td>
                   </tr>
 
                   <tr className="border-b border-gray-700">
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">CALORIES</th>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      CALORIES
+                    </th>
                     <td className="py-4 pr-4 sm:pr-7 text-right text-white">
                       {caloriesBurned} kcal
                     </td>
                   </tr>
 
                   <tr>
-                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">RATING</th>
-                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">{rating}</td>
+                    <th className="py-4 pl-4 sm:pl-7 text-left text-[#9CA3AF] font-semibold">
+                      RATING
+                    </th>
+                    <td className="py-4 pr-4 sm:pr-7 text-right text-white">
+                      {rating}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -120,12 +155,73 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
-            <button className="btn bg-[#C2F800] text-black flex-1 rounded-2xl">
+            <button
+              onClick={() => {
+  const alreadyAdded = plan.some(
+    (item) => item.id === workout.id
+    
+  );
+
+  if (alreadyAdded) {
+    toast("Already in your plan", {
+  icon: <i className="fa-solid fa-xmark"></i>,
+  style: {
+    background: "#1a1c23",
+    color: "#ffffff",
+    border: "1px solid #6b7280",
+    borderRadius: "12px",
+    fontWeight: "600",
+  },
+});
+    return;
+  }
+
+  addToPlan(workout);
+  toast.success("Added to today's plan", {
+  style: {
+    background: "#232732",
+    color: "white",
+    borderRadius: "12px",
+    fontWeight: "700",
+  },
+}); 
+}}
+              className="btn bg-[#C2F800] text-black flex-1 rounded-2xl"
+            >
               <i className="fa-solid fa-plus"></i>
               Add to today's plan
             </button>
 
-            <button className="btn flex-1 border border-gray-500 rounded-2xl">
+            <button
+             onClick={() => {
+  const alreadySaved = saved.some(
+    (item) => item.id === workout.id
+  );
+
+  if (alreadySaved) {
+    toast("Already saved" ,{
+  style: {
+    background: "#232732",
+    color: "white",
+    borderRadius: "12px",
+    fontWeight: "700",
+  },
+}); ;
+    return;
+  }
+
+  addToSaved(workout);
+  toast.success("Saved" , {
+  style: {
+    background: "#232732",
+    color: "white",
+    borderRadius: "12px",
+    fontWeight: "700",
+  },
+}); ;
+}}
+              className="btn flex-1 border border-gray-500 rounded-2xl"
+            >
               <i className="fa-regular fa-bookmark"></i>
               Save for later
             </button>

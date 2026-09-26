@@ -4,9 +4,19 @@ import logo from "@/assets/logo.png";
 import Link from "next/link";
 import React from "react";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
+import { PlanContext } from "@/context/PlanContext";
 
 const Navbar = () => {
   const pathname = usePathname();
+
+  const context = useContext(PlanContext);
+
+  if (!context) {
+    return null;
+  }
+
+  const { plan, saved } = context;
 
   const isWorkouts = pathname === "/" || pathname.startsWith("/workouts");
   const isMyPlan = pathname.startsWith("/myplan");
@@ -25,11 +35,11 @@ const Navbar = () => {
 
     <li>
       <Link
-        href="/myplan"
-        className={isMyPlan ? "bg-[#2b2d21] rounded-2xl text-[#C2F800]" : ""}
-      >
-        My Plan
-      </Link>
+  href="/myplan"
+  className={isMyPlan ? "bg-[#2b2d21] rounded-2xl text-[#C2F800]" : ""}
+>
+  My Plan
+</Link>
       </li>
     </>
   );
@@ -79,20 +89,24 @@ const Navbar = () => {
         <div className="navbar-end gap-1">
 
   <Link
-    href="/my-plan"
+    href="/myplan"
     className="flex items-center gap-2 rounded-full  px-3 py-1 text-sm font-semibold"
   >
     <span>Plan</span>
-    <span className="bg-[#ccff00] rounded-full px-2.5 py-1 text-black">0</span>
+    <span className="bg-[#ccff00] rounded-full px-2.5 py-1 text-black">
+  {plan.length}
+</span>
   </Link>
 
   <Link
-    href="/MyPlan"
-    className="flex items-center gap-2 rounded-full px-3 py-1 text-sm"
-  >
-    <span>Saved</span>
-    <span className="border border-gray-500 rounded-full px-2.5 py-1">0</span>
-  </Link>
+  href="/myplan?tab=saved"
+  className="flex items-center gap-2 rounded-full px-3 py-1 text-sm"
+>
+  <span>Saved</span>
+  <span className="border border-gray-500 rounded-full px-2.5 py-1">
+    {saved.length}
+  </span>
+</Link>
 
 </div>
       </div>
