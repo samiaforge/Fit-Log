@@ -1,8 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
+import { Workout } from "@/types/workout";
 
-const LibraryCard = ({ workout }) => {
+const LibraryCard = ({ workout }: { workout: Workout }) => {
   const {
     id,
     name,
