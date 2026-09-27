@@ -99,7 +99,7 @@ const Navbar = () => {
   </Link>
 
   <Link
-  href="/myplan?tab=saved"
+  href="/myplan/saved"
   className="flex items-center gap-2 rounded-full px-3 py-1 text-sm"
 >
   <span>Saved</span>

@@ -10,11 +10,11 @@ interface WorkoutDetailsPageProps {
 }
 
 const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
+  const context = useContext(PlanContext);
+
   if (!workout) {
     return <p>Workout not found</p>;
   }
-
-  const context = useContext(PlanContext);
 
   if (!context) {
     return null;
@@ -157,35 +157,34 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <button
               onClick={() => {
-  const alreadyAdded = plan.some(
-    (item) => item.id === workout.id
-    
-  );
+                const alreadyAdded = plan.some(
+                  (item) => item.id === workout.id,
+                );
 
-  if (alreadyAdded) {
-    toast("Already in your plan", {
-  icon: <i className="fa-solid fa-xmark"></i>,
-  style: {
-    background: "#1a1c23",
-    color: "#ffffff",
-    border: "1px solid #6b7280",
-    borderRadius: "12px",
-    fontWeight: "600",
-  },
-});
-    return;
-  }
+                if (alreadyAdded) {
+                  toast("Already in your plan", {
+                    icon: <i className="fa-solid fa-xmark"></i>,
+                    style: {
+                      background: "#1a1c23",
+                      color: "#ffffff",
+                      border: "1px solid #6b7280",
+                      borderRadius: "12px",
+                      fontWeight: "600",
+                    },
+                  });
+                  return;
+                }
 
-  addToPlan(workout);
-  toast.success("Added to today's plan", {
-  style: {
-    background: "#232732",
-    color: "white",
-    borderRadius: "12px",
-    fontWeight: "700",
-  },
-}); 
-}}
+                addToPlan(workout);
+                toast.success("Added to today's plan", {
+                  style: {
+                    background: "#232732",
+                    color: "white",
+                    borderRadius: "12px",
+                    fontWeight: "700",
+                  },
+                });
+              }}
               className="btn bg-[#C2F800] text-black flex-1 rounded-2xl"
             >
               <i className="fa-solid fa-plus"></i>
@@ -193,33 +192,33 @@ const WorkoutDetailsPage = ({ workout }: WorkoutDetailsPageProps) => {
             </button>
 
             <button
-             onClick={() => {
-  const alreadySaved = saved.some(
-    (item) => item.id === workout.id
-  );
+              onClick={() => {
+                const alreadySaved = saved.some(
+                  (item) => item.id === workout.id,
+                );
 
-  if (alreadySaved) {
-    toast("Already saved" ,{
-  style: {
-    background: "#232732",
-    color: "white",
-    borderRadius: "12px",
-    fontWeight: "700",
-  },
-}); ;
-    return;
-  }
+                if (alreadySaved) {
+                  toast("Already saved", {
+                    style: {
+                      background: "#232732",
+                      color: "white",
+                      borderRadius: "12px",
+                      fontWeight: "700",
+                    },
+                  });
+                  return;
+                }
 
-  addToSaved(workout);
-  toast.success("Saved" , {
-  style: {
-    background: "#232732",
-    color: "white",
-    borderRadius: "12px",
-    fontWeight: "700",
-  },
-}); ;
-}}
+                addToSaved(workout);
+                toast.success("Saved", {
+                  style: {
+                    background: "#232732",
+                    color: "white",
+                    borderRadius: "12px",
+                    fontWeight: "700",
+                  },
+                });
+              }}
               className="btn flex-1 border border-gray-500 rounded-2xl"
             >
               <i className="fa-regular fa-bookmark"></i>

@@ -2,17 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { PlanContext } from "@/context/PlanContext";
+import toast from "react-hot-toast";
 
-const MyPlanDetails = () => {
+interface MyPlanDetailsProps {
+  initialTab?: "today" | "saved";
+}
+
+const MyPlanDetails = ({ initialTab = "today" }: MyPlanDetailsProps) => {
   const context = useContext(PlanContext);
 
-  const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
+  const [activeTab, setActiveTab] = useState<"today" | "saved">(initialTab);
 
-  const [sortBy, setSortBy] = useState<
-    "duration" | "calories" | "rating"
-  >("duration");
+  const [sortBy, setSortBy] = useState<"duration" | "calories" | "rating">(
+    "duration",
+  );
 
   if (!context) {
     return null;
@@ -36,12 +41,12 @@ const MyPlanDetails = () => {
 
   const totalMinutes = displayedWorkouts.reduce(
     (total, workout) => total + workout.duration,
-    0
+    0,
   );
 
   const totalCalories = displayedWorkouts.reduce(
     (total, workout) => total + workout.caloriesBurned,
-    0
+    0,
   );
 
   return (
@@ -54,7 +59,6 @@ const MyPlanDetails = () => {
         </p>
       </div>
 
-     
       <div className="grid grid-cols-3 gap-3 border border-[#212631] rounded-2xl p-4 bg-[#13161D]">
         <div>
           <p className="text-[#8A92A0]">Exercises</p>
@@ -78,9 +82,7 @@ const MyPlanDetails = () => {
           <button
             onClick={() => setActiveTab("today")}
             className={`rounded-xl px-4 py-2 ${
-              activeTab === "today"
-                ? "bg-[#1C2028] text-white"
-                : ""
+              activeTab === "today" ? "bg-[#1C2028] text-white" : ""
             }`}
           >
             Today's Plan
@@ -89,9 +91,7 @@ const MyPlanDetails = () => {
           <button
             onClick={() => setActiveTab("saved")}
             className={`rounded-xl px-4 py-2 ${
-              activeTab === "saved"
-                ? "bg-[#1C2028] text-white"
-                : ""
+              activeTab === "saved" ? "bg-[#1C2028] text-white" : ""
             }`}
           >
             Saved
@@ -99,19 +99,12 @@ const MyPlanDetails = () => {
         </div>
 
         <div className="relative">
-          <p className="text-sm text-[#8A92A0] mb-2">
-            Sort By
-          </p>
+          <p className="text-sm text-[#8A92A0] mb-2">Sort By</p>
 
           <select
             value={sortBy}
             onChange={(e) =>
-              setSortBy(
-                e.target.value as
-                  | "duration"
-                  | "calories"
-                  | "rating"
-              )
+              setSortBy(e.target.value as "duration" | "calories" | "rating")
             }
             className="border border-[#212631] rounded-xl bg-[#13161D] px-4 py-2 text-white outline-none"
           >
@@ -125,9 +118,7 @@ const MyPlanDetails = () => {
       {/* Workout List */}
       {displayedWorkouts.length === 0 ? (
         <div className="border border-[#212631] rounded-2xl bg-[#111317] py-20 px-12 text-center">
-          <h2 className="pb-1 font-bold text-xl">
-            NOTHING HERE YET
-          </h2>
+          <h2 className="pb-1 font-bold text-xl">NOTHING HERE YET</h2>
 
           <p className="pb-7 text-[#A1A1AA]">
             Browse the library and add a lift to get today moving.
@@ -160,18 +151,14 @@ const MyPlanDetails = () => {
 
               {/* Workout Info */}
               <div className="flex-1 flex flex-col justify-center">
-                <h2 className="font-bold text-xl">
-                  {workout.name}
-                </h2>
+                <h2 className="font-bold text-xl">{workout.name}</h2>
 
-                <p className="text-[#8A92A0] mt-1">
-                  {workout.equipment}
-                </p>
+                <p className="text-[#8A92A0] mt-1">{workout.equipment}</p>
 
                 <div className="flex flex-wrap gap-4 mt-4 text-[#A1A1AA]">
                   <span>
-                    <i className="fa-regular fa-clock"></i>{" "}
-                    {workout.duration} min
+                    <i className="fa-regular fa-clock"></i> {workout.duration}{" "}
+                    min
                   </span>
 
                   <span>
@@ -180,8 +167,7 @@ const MyPlanDetails = () => {
                   </span>
 
                   <span>
-                    <i className="fa-regular fa-star"></i>{" "}
-                    {workout.rating}
+                    <i className="fa-regular fa-star"></i> {workout.rating}
                   </span>
                 </div>
               </div>
@@ -197,16 +183,41 @@ const MyPlanDetails = () => {
 
                 {activeTab === "today" && (
                   <button
-                    onClick={() => removeFromPlan(workout.id)}
+                    onClick={() => {
+                      removeFromPlan(workout.id);
+
+                      toast.success("Marked as done", {
+                        icon: <i className="fa-solid fa-check"></i>,
+                        style: {
+                          background: "#232732",
+                          color: "white",
+                          borderRadius: "12px",
+                          fontWeight: "700",
+                        },
+                      });
+                    }}
                     className="btn bg-[#C2F800] text-black rounded-xl"
                   >
-                    Mark as Read
+                    <i className="fa-solid fa-check"></i>
+                    Mark as Done
                   </button>
                 )}
 
                 {activeTab === "today" && (
                   <button
-                    onClick={() => removeFromPlan(workout.id)}
+                    onClick={() => {
+                      removeFromPlan(workout.id);
+
+                      toast.success("Removed from today's plan", {
+                        icon: <i className="fa-solid fa-trash"></i>,
+                        style: {
+                          background: "#232732",
+                          color: "white",
+                          borderRadius: "12px",
+                          fontWeight: "700",
+                        },
+                      });
+                    }}
                     className="btn btn-square rounded-xl"
                   >
                     <i className="fa-solid fa-xmark"></i>
@@ -215,7 +226,18 @@ const MyPlanDetails = () => {
 
                 {activeTab === "saved" && (
                   <button
-                    onClick={() => removeFromSaved(workout.id)}
+                    onClick={() => {
+                      removeFromSaved(workout.id);
+
+                      toast.success("Removed from saved", {
+                        style: {
+                          background: "#232732",
+                          color: "white",
+                          borderRadius: "12px",
+                          fontWeight: "700",
+                        },
+                      });
+                    }}
                     className="btn btn-square rounded-xl"
                   >
                     <i className="fa-solid fa-xmark"></i>
