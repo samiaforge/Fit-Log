@@ -4,7 +4,7 @@ FitLog is a modern, responsive workout library built with Next.js. It allows use
 
 ## 🔗 Live Demo
 
-[Live Link](YOUR_LIVE_LINK_HERE)
+[Live Link](https://fit-log-samia21.vercel.app/)
 
 ## 📂 GitHub Repository
 
